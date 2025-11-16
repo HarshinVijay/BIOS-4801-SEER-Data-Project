@@ -1,0 +1,37 @@
+---
+title: "02_Data_Analysis_Code"
+output: html_document
+date: "2025-11-16"
+---
+```{r}
+library(tidyverse)
+library(survival)
+library(knitr)
+library(tibble)
+library(lubridate)
+library(ggsurvfit)
+library(gtsummary)
+library(tidycmprsk)
+
+#Step 1- Loading in the Data
+CancerData <- read_csv("Data/CleanedData/RawData_clean.csv")
+glimpse(CancerData)
+CancerData
+
+
+cox_os_unadjusted <- coxph(
+  Surv(Survival_Months, OS_status) ~ Delay_Group,
+  data = RawData_clean
+)
+
+# 4. Display Results
+summary(cox_os_unadjusted)
+
+
+#Now I want to create a Kaplan Meier Survival curve
+OS_survival_object <- survfit(Surv(Time_to_Tx_Days, OS_Status) ~ Delay_Group, data = RawData_clean)
+plot(OS_survival_object, lty = 2:3)
+title("Kaplan-Meier Curves")
+
+
+```

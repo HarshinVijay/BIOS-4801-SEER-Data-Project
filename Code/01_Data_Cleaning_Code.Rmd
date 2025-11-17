@@ -10,45 +10,51 @@ library(tidyverse)
 library(survival)
 
 #Step 1- Loading in the Data
-RawData <- read_csv("Data/RawData/SEERData.csv")
+RawData <- read_csv("../Data/RawData/SEERData.csv")
 glimpse(RawData)
 
 #=====================================================================================
 #Step 2 - Data Cleaning
 RawData_clean <- RawData %>%
-  # Here I will mutate three columns to save Survival Months and Time to Treatment into Numeric values. I will also create three cases of the three different classifications of the SEER Death data. 0,1,2 Will reepresent Death due to cancer, Alive or dead because of other causes, Dead because of unknown, and the rest will be classified as 0
+  # Here I will mutate three columns to save Survival Months and Time to Treatment into Numeric values. I will also create three cases of the three different classifications of the SEER Death data. 0 will represent patients that are alive or alive during the conclusion of the study. 1 will represent patients who died due to the cancer. The rest will representat patients who are dead but it is not known if it was due to the cancer.  
   mutate(
   Survival_Months = as.numeric(`Survival months`), 
   Time_to_Tx_Days = as.numeric(`Time from diagnosis to treatment in days recode`),
   Competing_Risk_Status = case_when(
+    
+      `Vital status recode (study cutoff used)` == "Alive" ~ 0,
+      
       `SEER cause-specific death classification` == "Dead (attributable to this cancer dx)" ~ 1,
 
-      `SEER cause-specific death classification` == "Alive or dead of other cause" |
-      `SEER cause-specific death classification` == "Dead (missing/unknown COD)" ~ 2,
-      
-      TRUE ~ 0
+      TRUE ~ 2
     )
   ) %>%
   #Dropping all NAs
 drop_na(Survival_Months, Time_to_Tx_Days) 
   
-RawData_clean
 
-print(glimpse(RawData_clean))
-
-
-
-RawData_clean %>%
-  pull(`SEER cause-specific death classification`) %>%
-  unique()
-
-
-OS_status <- RawData %>%
+#I will create an overall survival status based simply on their status recode during the next check on if they were alive or dead during the next check.
+RawData_clean <- RawData_clean %>%
   mutate(
-    
+    OS_status = case_when(
+      `Vital status recode (study cutoff used)` == "Alive" ~ 0,
+      TRUE ~ 1
+    )
   )
 
-
+RawData_clean <- RawData_clean %>%
+  mutate(
+    
+    Delay_Group = case_when(
+      Time_to_Tx_Days > 42 ~ "Delayed",
+      TRUE ~ "Timely" 
+    ),
+    
+    Delay_Group = factor(Delay_Group, levels = c("Timely", "Delayed")) 
+  )
+    
+  
+write_csv(RawData_clean, "../Data/CleanedData/CleanedData.csv")  
 
 
 

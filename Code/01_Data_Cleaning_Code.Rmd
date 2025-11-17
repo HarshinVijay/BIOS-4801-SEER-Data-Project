@@ -5,18 +5,23 @@ date: "2025-11-04"
 ---
 
 ```{r}
+#--- Workflow: Data Cleaning and Preparation for Survival Analysis ---
+
 #Loading in packages
 library(tidyverse)
 library(survival)
+library(readr)
 
-#Step 1- Loading in the Data
+#=====================================================================================
+# Step 1: Loading the Data
+# Loaded the raw data which was pre filtered through the SEER stat software for Salivary Gland Cancer (C07.9 - C08.9) and M0 Stage. THe data was already filtered
 RawData <- read_csv("../Data/RawData/SEERData.csv")
 glimpse(RawData)
 
 #=====================================================================================
-#Step 2 - Data Cleaning
+# Step 2: Data Cleaning and Variable Creation
 RawData_clean <- RawData %>%
-  # Here I will mutate three columns to save Survival Months and Time to Treatment into Numeric values. I will also create three cases of the three different classifications of the SEER Death data. 0 will represent patients that are alive or alive during the conclusion of the study. 1 will represent patients who died due to the cancer. The rest will representat patients who are dead but it is not known if it was due to the cancer.  
+  # Here I will mutate three columns to save Survival Months and Time to Treatment into Numeric values. I will also create three cases of the three different classifications of the SEER Death data. 0 will represent patients that are alive or atleast were alive during the conclusion of the study. 1 will represent patients who died due to the cancer. 2 will represent the patients who died with unknown cause uncomfirmed if due to the cancer. I will put this all in a competing risks column.
   mutate(
   Survival_Months = as.numeric(`Survival months`), 
   Time_to_Tx_Days = as.numeric(`Time from diagnosis to treatment in days recode`),
@@ -29,19 +34,19 @@ RawData_clean <- RawData %>%
       TRUE ~ 2
     )
   ) %>%
-  #Dropping all NAs
+  #Dropping all NAs from the time data
 drop_na(Survival_Months, Time_to_Tx_Days) 
   
 
-#I will create an overall survival status based simply on their status recode during the next check on if they were alive or dead during the next check.
+#This creates an Overall Survival (OS) Status column based on the binary condition of 0/1 if they are Alive or Dead. This binary status is needed for the Cox Proportional Hazards Model.
 RawData_clean <- RawData_clean %>%
   mutate(
     OS_status = case_when(
-      `Vital status recode (study cutoff used)` == "Alive" ~ 0,
-      TRUE ~ 1
+      `Vital status recode (study cutoff used)` == "Alive" ~ 0, #  0 = Censored
+      TRUE ~ 1 #All Non-Survivors
     )
   )
-
+#This variable categorizes and creates a new cutoff of 42 days which was clinically determined to be a known as a delay in head and neck cancer therapy
 RawData_clean <- RawData_clean %>%
   mutate(
     
@@ -49,12 +54,30 @@ RawData_clean <- RawData_clean %>%
       Time_to_Tx_Days > 42 ~ "Delayed",
       TRUE ~ "Timely" 
     ),
-    
+    # Factor Conversion for the Hazard Ratio
     Delay_Group = factor(Delay_Group, levels = c("Timely", "Delayed")) 
   )
-    
+#=====================================================================================
+# Step 3: Visualizations 
+
+# Visualization 1: Histogram of the primary exposure variable to identity if transformations are needed. We may need log transformation due to skewness. However the Cox PH is already non parametric so there is no need to log the data.
+RawData_clean %>%
+  ggplot(aes(x = Time_to_Tx_Days)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "black") +
+  labs(title = "Distribution of Time to Treatment (Days)", x = "Time from Diagnosis to Treatment (Days)")
+
+# Visualization 2: Boxplot of survival time by the exposure group. This visualizes the difference between the follow up times of the delay and timely groups.
+RawData_clean %>%
+  ggplot(aes(x = Delay_Group, y = Survival_Months)) +
+  geom_boxplot(fill = "lightgreen") +
+  labs(title = "Survival Follow-up Time by Delay Status", y = "Survival Months")
+
+#=====================================================================================
+# Step 4: Saving the Cleaned Data 
+
+# Saves the final clean dataset
+write_csv(RawData_clean, "../Data/CleanedData/CleanedData.csv")    
   
-write_csv(RawData_clean, "../Data/CleanedData/CleanedData.csv")  
 
 
 

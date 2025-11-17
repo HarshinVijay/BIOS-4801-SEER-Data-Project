@@ -3,7 +3,16 @@ title: "02_Data_Analysis_Code"
 output: html_document
 date: "2025-11-16"
 ---
+
+The reseaarch question I will be looking at is: How does delay in Cancer Therapy (Delay > 42 days) affect Overall Survival (OS) and outcomes in patients with Head and Neck Salivary Gland Tumors?
+
+Hypothesis: Patients who received Delayed treatment (Delay > 42 days) will have worse survival outcomes compared to patients who received Timely treatment.
+
+
 ```{r}
+#--- Workflow: Data Cleaning and Preparation for Survival Analysis ---
+
+#Loading in packages
 library(tidyverse)
 library(survival)
 library(knitr)
@@ -13,20 +22,31 @@ library(ggsurvfit)
 library(gtsummary)
 library(tidycmprsk)
 
-#Step 1- Loading in the Data
+#=====================================================================================
+# Step 1: Loading the Data
+# Load the cleaned data from the appropriate file
 CancerData <- read_csv("../Data/CleanedData/CleanedData.csv")
 glimpse(CancerData)
 CancerData
 
+#=====================================================================================
+# Step 2: Overall Survival Cox Model for Hazard Ratio
+# To justify this statistical test we used the Cox Proportional Hazards Model because the response variable of Survival months and the data was censored. Meaning we need to account for patients alive or patients who were censored due to their outcome during the study. 
 
 cox_os_unadjusted <- coxph(
   Surv(Survival_Months, OS_status) ~ Delay_Group,
   data = CancerData
 )
 
-summary(cox_os_unadjusted)
+print(summary(cox_os_unadjusted))
+
+#Testing a core assumption of the Hazard Ratio using cox.zph()
+ph_test <- cox.zph(cox_os_unadjusted)
+print(ph_test)
 
 
 
 
 ```
+
+We are testing a core PH Assumption that the Hazard Ratio of the delay group is constant over the entire follow up time.With a P value of 0.88, the hazards are proportional and we fail to reject the null hypothesis. This means that the risk with the delay group is constant throughout the follow up period. However, this does not make sense as the delay should not improve survival. There needs to be more analysis done to interpret the Hazard ratio.

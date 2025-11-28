@@ -14,10 +14,14 @@ library(readr)
 
 #=====================================================================================
 # Step 1: Loading the Data
-# Loaded the raw data which was pre filtered through the SEER stat software for Salivary Gland Cancer (C07.9 - C08.9) and M0 Stage. THe data was already filtered
+# Loaded the raw data which was pre filtered through the SEER stat software for Salivary Gland Cancer (C07.9 - C08.9) and M0 Stage. The data was already filtered
 RawData <- read_csv("../Data/RawData/SEERData.csv")
 glimpse(RawData)
 
+
+```
+
+```{r}
 #=====================================================================================
 # Step 2: Data Cleaning and Variable Creation
 RawData_clean <- RawData %>%
@@ -57,6 +61,11 @@ RawData_clean <- RawData_clean %>%
     # Factor Conversion for the Hazard Ratio
     Delay_Group = factor(Delay_Group, levels = c("Timely", "Delayed")) 
   )
+
+```
+
+
+```{r}
 #=====================================================================================
 # Step 3: Visualizations 
 

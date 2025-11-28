@@ -4,7 +4,7 @@ output: html_document
 date: "2025-11-16"
 ---
 
-The reseaarch question I will be looking at is: How does delay in Cancer Therapy (Delay > 42 days) affect Overall Survival (OS) and outcomes in patients with Head and Neck Salivary Gland Tumors?
+The research question I will be looking at is: How does delay in Cancer Therapy (Delay > 42 days) affect Overall Survival (OS) and outcomes in patients with Head and Neck Salivary Gland Tumors?
 
 Hypothesis: Patients who received Delayed treatment (Delay > 42 days) will have worse survival outcomes compared to patients who received Timely treatment.
 
@@ -21,6 +21,7 @@ library(lubridate)
 library(ggsurvfit)
 library(gtsummary)
 library(tidycmprsk)
+library(survminer)
 
 #=====================================================================================
 # Step 1: Loading the Data
@@ -29,6 +30,10 @@ CancerData <- read_csv("../Data/CleanedData/CleanedData.csv")
 glimpse(CancerData)
 CancerData
 
+```
+
+
+```{r}
 #=====================================================================================
 # Step 2: Overall Survival Cox Model for Hazard Ratio
 # To justify this statistical test we used the Cox Proportional Hazards Model because the response variable of Survival months and the data was censored. Meaning we need to account for patients alive or patients who were censored due to their outcome during the study. 
@@ -38,15 +43,139 @@ cox_os_unadjusted <- coxph(
   data = CancerData
 )
 
-print(summary(cox_os_unadjusted))
+cox_os_unadjusted
 
 #Testing a core assumption of the Hazard Ratio using cox.zph()
 ph_test <- cox.zph(cox_os_unadjusted)
 print(ph_test)
 
+survminer::ggcoxzph(ph_test, point.size = 0.1)
+
+
+ggcoxzph(ph_test)
+
 
 
 
 ```
+Interpretation of Assumptions Test
 
-We are testing a core PH Assumption that the Hazard Ratio of the delay group is constant over the entire follow up time.With a P value of 0.88, the hazards are proportional and we fail to reject the null hypothesis. This means that the risk with the delay group is constant throughout the follow up period. However, this does not make sense as the delay should not improve survival. There needs to be more analysis done to interpret the Hazard ratio.
+We are testing a core PH Assumption that the Hazard Ratio of the delay group is constant over the entire follow up time.With a P value of 0.88, the hazards are proportional and we fail to reject the null hypothesis. This means that the risk with the delay group is constant throughout the follow up period. However what does not make sense is that there is a 33% decrease in deaths due to the delay in treatment. Delay in treatment should in improve survival. Further analysis is needed.
+
+
+
+ 
+
+```{r}
+#=====================================================================================
+# Step 3: Landmark Analysis (LMA) 
+
+#Defining days for the landmarked data set and converting into months for consistency with units.
+tL_days <- 42
+tL_months <- tL_days / 30.4375
+
+# Creating the landmarked data set for patients who survive past the 42 day period
+df_lma <- CancerData %>%
+  filter(Survival_Months >= tL_months) %>%
+  mutate(Survival_Months_LMA = Survival_Months - tL_months)
+
+#Landmark Cox Model 
+cox_lma <- coxph(
+  Surv(Survival_Months_LMA, OS_status) ~ Delay_Group,
+  data = df_lma
+)
+
+cox_lma
+
+ph_test_lma <- cox.zph(cox_lma)
+print(ph_test_lma)
+```
+
+```{r}
+#=====================================================================================
+# Step 4: Competing Risks Model for Cancer-Specific Survival (CSS)
+install.packages("riskRegression")
+library(riskRegression)
+
+
+CancerData$Delay_Group <- factor(CancerData$Delay_Group)
+
+
+fine_gray_model_FGR_Alt <- FGR(
+    formula = Hist(Survival_Months, Competing_Risk_Status) ~ Delay_Group,
+    data = CancerData,
+    cause = 1  
+)
+
+#print output
+print(fine_gray_model_FGR_Alt)
+
+#Printing competing event
+fine_gray_model_competing <- FGR(
+    formula = Hist(Survival_Months, Competing_Risk_Status) ~ Delay_Group,
+    data = CancerData,
+    cause = 2 
+)
+
+# Print output
+print(fine_gray_model_competing)
+
+
+```
+The analysis was performed using a Cox Proportional Hazards Model and a Fine- Gray Competing Risks Regression model. The Cox model used the outcome variable of Survival_Months which showed event data to the time of the event and was right censored by OS_status. This was justified because the Proportional Hazards Assumption (p-value = 0.88) was met and the Hazard ratios were constant throughout the population. Next, the FGR model was chosen because the data set contained two different and mutually exclusive causes of death which was important to model cancer distribution hazards and counted the other classification of "other death" as a competing risk.
+
+The survival time variable did not need any further transformations because the Cox and GFR models are semi parametric models and do not make any assumptions about distributions of the hazard functions. So we did not need to transform any data for any normality assumptions.
+
+
+```{r}
+#=====================================================================================
+# Step 5: Visualization 1: Overall Survival (OS) Kaplan-Meier Curve 
+
+km_fit_final <- survfit(Surv(Survival_Months, OS_status) ~ Delay_Group, data = CancerData)
+
+km_plot <- ggsurvplot(
+  km_fit_final,
+  data = CancerData,
+  risk.table = TRUE, 
+  pval = TRUE, 
+  conf.int = FALSE,
+  title = "Overall Survival by Treatment Delay Status (Unadjusted)",
+  legend.title = "Delay Group",
+  xlab = "Time (Months)",
+  ylab = "Overall Survival Probability"
+)
+#Print plot
+print(km_plot)
+
+```
+
+
+```{r}
+#=====================================================================================
+# Step 6: Visualization 2: Forest Plot
+
+forest_plot <- ggforest(cox_lma, 
+         data = df_lma,
+         main = "Landmark Analysis (LMA) Hazard Ratio for Overall Survival")
+
+print(forest_plot)
+```
+
+
+
+```{r}
+#=====================================================================================
+# Step 7: Saving both figures directly into the figures folder 
+ggsave(filename = "../figures/km_overall_survival.png", plot = km_plot$plot, width = 7, height = 5)
+ggsave(filename = "../figures/forest_lma_hr.png", plot = forest_plot, width = 7, height = 5)
+
+```
+
+To summarize this analysis, our hypothesis that Delayed treatment leads to worse survival outcomes is supported across all models. The timely group shows a significantly lower hazard ratio for all outcomes. The Cox PH model provides the instantaneous rate of death from any cause of patients that are alive and at risk during the analysis. The FGR models shows the subdistribution hazard ratio which relates the covariates to the Cumulative Incidence Function (CIF) which is the probability of an event occuring over time. Our analysis shows that timely treatment (treatment < 42 days) reduces the hazard of cancer death by 30.7% (SHR = 0.693) To gain better insights into the difference between timely and delay groups a landmark analysis(LMA) was performed. The LMA shows that among patients who survived past the 42 day period, the timely group still had a 34.1% lower mortality risk as the study continued.
+
+Based on our Survival models the Kaplan-Meier (KM) curve estimates the survival probability over time for the two groups. There is a difference in delayed vs timely groups and are separated throughout the follow up period. The Log rank test of p< 0.0001 shows the separation is statistically significant. The timely group has a higher probability of survival than the delayed group at every time point.
+
+The Forest plot shows the Hazard Ratio form the Landmark Cox Model after the 42 day period. The HR of 0.66 indicates that the timely group has a 34% lower instantaneous risk of death than the delayed group going forward. This test removes patients who were censored before 42 days to confirm that there is an advantage of Timely treatment.
+
+
+

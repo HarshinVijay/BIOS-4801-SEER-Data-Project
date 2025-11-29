@@ -56,9 +56,9 @@ fine_gray_model_competing <- FGR(formula = Hist(Survival_Months, Competing_Risk_
 
 - Salivary gland cancers (SGCs) are rare head and neck malignancies where timely intervention is critical for prognosis. 
 
-- Clinical guidelines suggest that treatment initiation beyond 42 days post-diagnosis is associated with worse overall survival (OS). 
+- Clinical guidelines suggest that start of treatment beyond 42 days post-diagnosis is associated with worse overall survival (OS). 
 
-- This study uses population-based data to rigorously quantify the hazard associated with this treatment delay threshold.
+- This study uses population-based data to quantify the hazard associated with this treatment delay threshold.
 
 
 # Objectives

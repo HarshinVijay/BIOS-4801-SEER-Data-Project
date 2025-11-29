@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<!--
+Font-awesome icons ie github or twitter
+-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/brands.css" integrity="sha384-n9+6/aSqa9lBidZMRCQHTHKJscPq6NW4pCQBiMmHdUCvPN8ZOg2zJJTkC7WIezWv" crossorigin="anonymous">
+
+<!--
+Google fonts api stuff
+-->
+
+
+
+<title>The Effect of Treatment Delays in Salivary Gland Tumors</title>
+
+
+
+
+
+
+<style>
+@page {
+size: 45in 38in;
+margin: 0;
+padding: 0;
+}
+body {
+margin: 0;
+font-size: 45px;
+width: 45in;
+height: 38in;
+padding: 0;
+text-align: justify;
+font-family: Palatino;
+}
+.poster_wrap {
+width: 45in;
+height: 38in;
+padding: 0cm;
+}
+.title_container {
+width: 100%;
+height: 15%;
+overflow: hidden;
+background-color: #0b4545;
+border: 0 solid #0b4545
+;
+}
+.logo_left {
+float: left;
+width: 10%;
+height: 100%;
+background-color: #0b4545;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.logo_right {
+float: right;
+width: 10%;
+height: 100%;
+background-color: #0b4545;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.poster_title {
+text-align: center;
+position: relative;
+float: left;
+width: 80%;
+height: 100%;
+color: #FFFFFF;
+top: 50%;
+transform: translateY(-50%);
+-webkit-transform: translateY(-50%);
+}
+#title {
+font-family: Palatino;
+}
+/* unvisited link */
+a:link {
+color: #008080;
+text-decoration: none;
+}
+.mybreak {
+  break-before: column;
+}
+/* visited link */
+a:visited {
+color: #008080;
+text-decoration: none;
+}
+
+/* mouse over link */
+a:hover {
+color: #008080;
+text-decoration: none;
+}
+
+/* selected link */
+a:active {
+color: #008080;
+text-decoration: none;
+}
+.poster_body {
+-webkit-column-count: 3; /* Chrome, Safari, Opera */
+-moz-column-count: 3; /* Firefox */
+column-count: 3;
+-webkit-column-fill: auto;
+-moz-column-fill: auto;
+column-fill: auto;
+-webkit-column-rule-width: 1mm;
+-moz-column-rule-width: 1mm;
+column-rule-width: 1mm;
+-webkit-column-rule-style: dashed;
+-moz-column-rule-style: dashed;
+column-rule-style: dashed;
+-webkit-column-rule-color: #0b4545;
+-moz-column-rule-color: #0b4545;
+column-rule-color: #0b4545;
+column-gap: 1em;
+padding-left: 0.5em;
+padding-right: 0.5em;
+height: 100%;
+color: #000000
+background-color: #ffffff;
+}
+.poster_title h1 {
+font-size: 75pt;
+margin: 0;
+border: 0;
+font-weight: normal;
+}
+.poster_body_wrap{
+width: 45in;
+height: calc(100% - 17%);
+padding-top: calc(38in * 0.01);
+padding-bottom: calc(38in * 0.01);
+background-color: #ffffff;
+}
+.poster_title h3 {
+color: #ffffff;
+font-size: 50pt;
+margin: 0;
+border: 0;
+font-weight: normal;
+}
+.poster_title h3 > sup {
+  font-size: 35pt;
+  margin-left: 0.02em;
+}
+.poster_title h5 {
+color: #FFFFFF;
+font-size: 35pt;
+margin: 0;
+border: 0;
+font-weight: normal;
+}
+img {
+margin-top: 0;
+margin-bottom: 0;
+}
+.section {
+  padding: 0.2em;
+}
+.poster_body h1 {
+text-align: center;
+color: #FFFFFF;
+font-size: 65pt;
+border: 2mm solid #0b4545;
+background-color: #0b4545;
+border-radius: 4mm 0mm;
+margin-top: 2mm;
+margin-bottom: 2mm;
+font-weight: normal;
+}
+.poster_body h2 {
+color: #000000;
+font-size: 40pt;
+padding-left: 4mm;
+font-weight: normal;
+}
+.span {
+width: 200%;
+}
+/* center align leaflet map,
+from https://stackoverflow.com/questions/52112119/center-leaflet-in-a-rmarkdown-document */
+.html-widget {
+margin: auto;
+position: sticky;
+margin-top: 2cm;
+margin-bottom: 2cm;
+}
+.leaflet.html-widget.html-widget-static-bound.leaflet-container.leaflet-touch.leaflet-fade-anim.leaflet-grab.leaflet-touch-drag.leaflet-touch-zoom {
+position: sticky;
+width: 100%;
+}
+pre.sourceCode.r, pre.sourceCode.python {
+background-color: #ffffff20;
+border: solid #008080 1mm;
+border-radius: 0.5em;
+padding: 4mm;
+margin: auto;
+margin-top: 1em;
+margin-bottom: 1em;
+/* align-items: center; */
+}
+div.sourceCode {
+background-color: transparent;
+width: 85%;
+margin-left: auto;
+margin-right: auto;
+}
+code.sourceCode.r, code.sourceCode.python {
+background-color: transparent;
+font-size: 20pt;
+border-radius: 2mm;
+}
+code {
+font-size: 25pt;
+font-family: monospace;
+background-color: #00808024;
+color: #008080;
+padding: 1.2mm;
+line-height: 1;
+border-radius: 2mm;
+}
+.caption {
+font-size: 20pt;
+}
+.table caption {
+font-size: 20pt;
+padding-bottom: 3mm;
+
+}
+code {
+font-size: 1em;
+font-family: monospace;
+background-color: #00808024;
+color: #0b4545;
+padding: 1.2mm;
+border-radius: 2mm;
+}
+.poster_title code {
+font-size: 1em;
+}
+table {
+font-size: 40px;
+margin: auto;
+border-top: 3px solid #666;
+border-bottom: 3px solid #666;
+}
+table thead th {
+border-bottom: 3px solid #ddd;
+}
+td {
+padding: 8px;
+}
+th {
+padding: 15px;
+}
+caption {
+margin-bottom: 10px;
+}
+.poster_body p {
+margin-right: 4mm;
+margin-left: 4mm;
+margin-top: 6mm;
+margin-bottom: 10mm;
+color: #000000
+}
+.poster_body ol {
+margin-right: 4mm;
+margin-left: 4mm;
+}
+#ul {
+margin-right: 4mm;
+margin-left: 4mm;
+}
+.references p {
+font-size: 20pt;
+}
+.orcid img {
+  width: 1em;
+}
+</style>
+</head>
+<body>
+
+
+<div class="poster_wrap">
+<div class="title_container">
+<!-- Left Logo  -->
+<div class="logo_left">
+</div>
+<!-- Poster Title -->
+<div class= "poster_title">
+<h1 id="title">The Effect of Treatment Delays in Salivary Gland Tumors</h1>
+<h3 id="author">Harshin Vijay<sup>1</sup></h3>
+<h5 id="affiliation"><sup>1</sup> School of Biological Sciences, Georgia Institute of Technology</h5>
+</div>
+<!-- Right Logo  -->
+<div class="logo_right">
+</div>
+</div>
+
+<div class='poster_body_wrap'>
+<div class='poster_body'>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Salivary gland cancers (SGCs) are rare head and neck malignancies where timely intervention is critical for prognosis. Clinical guidelines suggest that treatment initiation beyond 42 days post-diagnosis is associated with worse overall survival (OS). This study uses population-based data to rigorously quantify the hazard associated with this treatment delay threshold.</p>
+</div>
+<div id="objectives" class="section level1">
+<h1>Objectives</h1>
+<ol style="list-style-type: decimal">
+<li><p>Quantify the effect of the 42-day treatment delay threshold on Overall Survival (OS).</p></li>
+<li><p>Determine if the effect is specific to cancer-related mortality using Competing Risks Analysis.</p></li>
+<li><p>Evaluate if the survival advantage is sustained beyond the initial treatment period.</p></li>
+</ol>
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+<ul>
+<li><p>Data Source: <span class="math inline">\(\mathbf{18,291}\)</span> cases of M0-stage Salivary Gland Cancer were extracted from the SEER Program database.</p></li>
+<li><p>Exposure: Treatment delay was categorized into Delayed (<span class="math inline">\(\gt 42\)</span> days) vs. Timely (<span class="math inline">\(\le 42\)</span> days).</p></li>
+<li><p>Overall Survival (OS) Analysis: The Kaplan-Meier method was used for visualization. The Cox Proportional Hazards Model was used to calculate the all-cause mortality hazard ratio.</p></li>
+<li><p>Sustained Benefit: Landmark Analysis (LMA) (<span class="math inline">\(\text{T}_{\text{L}}=42\)</span> days) assessed the OS benefit only among patients surviving past the initial 42-day period.</p></li>
+<li><p>Competing Risks Analysis (CSS): The Fine-Gray Regression (FGR) model was used to model the instantaneous risk (subdistribution hazard) of Cancer Death (Cause 1) while treating Other Death (Cause 2) as a competing event.</p></li>
+</ul>
+</div>
+<div id="figure-1" class="section level1">
+<h1>Figure 1</h1>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## ℹ The deprecated feature was likely used in the ggpubr package.
+##   Please report the issue at &lt;https://github.com/kassambara/ggpubr/issues&gt;.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:km-plot"></span>
+<img src="Digital-Poster_files/figure-html/km-plot-1.png" alt=" Overall Survival by Treatment Delay Status (Unadjusted). The Kaplan-Meier survival curves show a highly significant survival benefit for the Timely treatment group compared to the Delayed group (Log-Rank p &lt; 0.0001)." width="100%" />
+<p class="caption">
+Figure 1:  Overall Survival by Treatment Delay Status (Unadjusted). The Kaplan-Meier survival curves show a highly significant survival benefit for the Timely treatment group compared to the Delayed group (Log-Rank p &lt; 0.0001).
+</p>
+</div>
+</div>
+<div id="figure-2" class="section level1">
+<h1>Figure 2</h1>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:lma-plot"></span>
+<img src="Digital-Poster_files/figure-html/lma-plot-1.png" alt="Landmark Analysis (LMA) Hazard Ratio for Overall Survival. Among patients surviving past 42 days, the Timely group had a 34.1% lower mortality risk {HR} = 0.659, 95% {CI}: 0.62–0.70; {p} &lt; 0.001) compared to the Delayed group (reference)." width="100%" />
+<p class="caption">
+Figure 2: Landmark Analysis (LMA) Hazard Ratio for Overall Survival. Among patients surviving past 42 days, the Timely group had a 34.1% lower mortality risk {HR} = 0.659, 95% {CI}: 0.62–0.70; {p} &lt; 0.001) compared to the Delayed group (reference).
+</p>
+</div>
+</div>
+<div id="table-1" class="section level1">
+<h1>Table 1</h1>
+<p>The Fine-Gray model reveals that the benefit holds true for the primary outcome.</p>
+<ul>
+<li><p>Cancer Death (Cause 1): The instantaneous risk of Cancer Death is <span class="math inline">\(\mathbf{30.7\%}\)</span> lower for the Timely group (<span class="math inline">\(\text{SHR} = 0.693; \text{p} &lt; 2.2\text{e}^{-16}\)</span>).</p></li>
+<li><p>Other Death (Cause 2): The risk of Other Death is also significantly lower (<span class="math inline">\(\text{SHR} = 0.756; \text{p} &lt; 2\text{e}^{-12}\)</span>), suggesting the Timely group is healthier overall.</p></li>
+</ul>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<p>To summarize this analysis, our hypothesis that Delayed treatment leads to worse survival outcomes is supported across all models. The timely group shows a significantly lower hazard ratio for all outcomes. The Cox PH model provides the instantaneous rate of death from any cause of patients that are alive and at risk during the analysis. The FGR models shows the subdistribution hazard ratio which relates the covariates to the Cumulative Incidence Function (CIF) which is the probability of an event occuring over time. Our analysis shows that timely treatment (treatment &lt; 42 days) reduces the hazard of cancer death by 30.7% (SHR = 0.693) To gain better insights into the difference between timely and delay groups a landmark analysis(LMA) was performed. The LMA shows that among patients who survived past the 42 day period, the timely group still had a 34.1% lower mortality risk as the study continued.</p>
+<p>Based on our Survival models the Kaplan-Meier (KM) curve estimates the survival probability over time for the two groups. There is a difference in delayed vs timely groups and are separated throughout the follow up period. The Log rank test of p&lt; 0.0001 shows the separation is statistically significant. The timely group has a higher probability of survival than the delayed group at every time point.</p>
+<p>The Forest plot shows the Hazard Ratio form the Landmark Cox Model after the 42 day period. The HR of 0.66 indicates that the timely group has a 34% lower instantaneous risk of death than the delayed group going forward. This test removes patients who were censored before 42 days to confirm that there is an advantage of Timely treatment.</p>
+</div>
+<div id="next-steps" class="section level1">
+<h1>Next Steps</h1>
+<p>Conduct multivariable Cox and FGR models to adjust for key confounders (e.g., patient age, tumor grade).</p>
+<ul>
+<li><p>Perform sensitivity analysis using different delay cutoffs (e.g., 60 days) to validate the <span class="math inline">\(\mathbf{42}\)</span>-day threshold.</p></li>
+<li><p>Visually explore the probability of each event over time using the Cumulative Incidence Function (CIF) curves.</p></li>
+</ul>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>The hypothesis is strongly supported. Timely treatment initiation (<span class="math inline">\(\le 42\)</span> days) is associated with a highly significant reduction in the hazard of death from both cancer-specific and other causes. The survival benefit persists well beyond the initial treatment period.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>National Cancer Institute. Surveillance, Epidemiology, and End Results (SEER) Program SEER 18 registry data (1975–2020), Released April 2023. Available at: [Insert Specific SEER URL/Access Point Here]</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+var script = document.createElement("script");
+script.type = "text/javascript";
+var src = "true";
+if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+if (location.protocol !== "file:" && /^https?:/.test(src))
+src = src.replace(/^https?:/, '');
+script.src = src;
+document.getElementsByTagName("head")[0].appendChild(script);
+})();
+</script>
+
+
+</body>
+</html>

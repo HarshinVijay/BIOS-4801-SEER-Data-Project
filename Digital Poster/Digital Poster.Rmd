@@ -1,0 +1,141 @@
+---
+title: The Effect of Treatment Delays in Salivary Gland Tumors
+author:
+  - name: Harshin Vijay
+    affil: 1
+affiliation:
+  - num: 1
+    address: School of Biological Sciences, Georgia Institute of Technology
+output: 
+  posterdown::posterdown_html:
+    self_contained: false
+    column_numbers: 3
+bibliography: packages.bib
+---
+
+```{r setup, include=FALSE}
+#--- Setup, Package Loading, and Model Execution ---
+
+# Load necessary packages
+library(tidyverse)
+library(survival)
+library(cmprsk)
+library(ggsurvfit)
+library(gtsummary)
+library(readr) 
+library(dplyr)
+library(prodlim) 
+library(riskRegression) 
+library(survminer) 
+
+knitr::opts_chunk$set(echo = FALSE)
+
+# 1. Load Data
+# NOTE: Ensure the path is correct: "../Data/CleanedData/CleanedData.csv"
+CancerData <- read_csv("../Data/CleanedData/CleanedData.csv")
+
+# Ensure Delay_Group is a factor with correct levels
+CancerData$Delay_Group <- factor(CancerData$Delay_Group, levels = c("Timely", "Delayed"))
+
+# Landmark definitions (42 days)
+tL_days <- 42
+tL_months <- tL_days / 30.4375
+
+df_lma <- CancerData %>%
+  filter(Survival_Months >= tL_months) %>%
+  mutate(Survival_Months_LMA = Survival_Months - tL_months)
+
+# 2. Run All Models (Required for Results Section)
+cox_lma <- coxph(Surv(Survival_Months_LMA, OS_status) ~ Delay_Group, data = df_lma)
+km_fit_final <- survfit(Surv(Survival_Months, OS_status) ~ Delay_Group, data = CancerData)
+fine_gray_model_FGR <- FGR(formula = Hist(Survival_Months, Competing_Risk_Status) ~ Delay_Group, data = CancerData, cause = 1)
+fine_gray_model_competing <- FGR(formula = Hist(Survival_Months, Competing_Risk_Status) ~ Delay_Group, data = CancerData, cause = 2)
+```
+
+# Introduction
+
+Salivary gland cancers (SGCs) are rare head and neck malignancies where timely intervention is critical for prognosis. Clinical guidelines suggest that treatment initiation beyond 42 days post-diagnosis is associated with worse overall survival (OS). This study uses population-based data to rigorously quantify the hazard associated with this treatment delay threshold.
+
+# Objectives
+
+1. Quantify the effect of the 42-day treatment delay threshold on Overall Survival (OS).
+
+2. Determine if the effect is specific to cancer-related mortality using Competing Risks Analysis.
+
+3. Evaluate if the survival advantage is sustained beyond the initial treatment period.
+
+# Methods
+
+- Data Source: $\mathbf{18,291}$ cases of M0-stage Salivary Gland Cancer were extracted from the SEER Program database.
+
+- Exposure: Treatment delay was categorized into Delayed ($\gt 42$ days) vs. Timely ($\le 42$ days).
+- Overall Survival (OS) Analysis: The Kaplan-Meier method was used for visualization. The Cox Proportional Hazards Model was used to calculate the all-cause mortality hazard ratio.
+
+- Sustained Benefit: Landmark Analysis (LMA) ($\text{T}_{\text{L}}=42$ days) assessed the OS benefit only among patients surviving past the initial 42-day period.
+
+- Competing Risks Analysis (CSS): The Fine-Gray Regression (FGR) model was used to model the instantaneous risk (subdistribution hazard) of Cancer Death (Cause 1) while treating Other Death (Cause 2) as a competing event.
+
+# Figure 1
+
+```{r km-plot, out.width='100%', fig.height=5, fig.align='center', fig.cap=' Overall Survival by Treatment Delay Status (Unadjusted). The Kaplan-Meier survival curves show a highly significant survival benefit for the Timely treatment group compared to the Delayed group (Log-Rank p < 0.0001).'}
+km_plot <- ggsurvplot(
+  km_fit_final,
+  data = CancerData,
+  pval = TRUE,
+  conf.int = FALSE,
+  legend.title = "Delay Group",
+  xlab = "Time (Months)",
+  ylab = "Overall Survival Probability"
+)$plot
+print(km_plot)
+```
+
+
+# Figure 2
+
+```{r lma-plot, out.width='100%', fig.height=3, fig.align='center', fig.cap='Landmark Analysis (LMA) Hazard Ratio for Overall Survival. Among patients surviving past 42 days, the Timely group had a 34.1% lower mortality risk {HR} = 0.659, 95% {CI}: 0.62–0.70; {p} < 0.001) compared to the Delayed group (reference).'}
+forest_plot <- ggforest(cox_lma, 
+                         data = df_lma,
+                         main = "Landmark Analysis (LMA) HR")
+print(forest_plot)
+```
+
+
+
+# Table 1
+
+The Fine-Gray model reveals that the benefit holds true for the primary outcome.
+
+- Cancer Death (Cause 1): The instantaneous risk of Cancer Death is $\mathbf{30.7\%}$ lower for the Timely group ($\text{SHR} = 0.693; \text{p} < 2.2\text{e}^{-16}$).
+
+- Other Death (Cause 2): The risk of Other Death is also significantly lower ($\text{SHR} = 0.756; \text{p} < 2\text{e}^{-12}$), suggesting the Timely group is healthier overall.
+
+# Discussion
+
+To summarize this analysis, our hypothesis that Delayed treatment leads to worse survival outcomes is supported across all models. The timely group shows a significantly lower hazard ratio for all outcomes. The Cox PH model provides the instantaneous rate of death from any cause of patients that are alive and at risk during the analysis. The FGR models shows the subdistribution hazard ratio which relates the covariates to the Cumulative Incidence Function (CIF) which is the probability of an event occuring over time. Our analysis shows that timely treatment (treatment < 42 days) reduces the hazard of cancer death by 30.7% (SHR = 0.693) To gain better insights into the difference between timely and delay groups a landmark analysis(LMA) was performed. The LMA shows that among patients who survived past the 42 day period, the timely group still had a 34.1% lower mortality risk as the study continued.
+
+Based on our Survival models the Kaplan-Meier (KM) curve estimates the survival probability over time for the two groups. There is a difference in delayed vs timely groups and are separated throughout the follow up period. The Log rank test of p< 0.0001 shows the separation is statistically significant. The timely group has a higher probability of survival than the delayed group at every time point.
+
+The Forest plot shows the Hazard Ratio form the Landmark Cox Model after the 42 day period. The HR of 0.66 indicates that the timely group has a 34% lower instantaneous risk of death than the delayed group going forward. This test removes patients who were censored before 42 days to confirm that there is an advantage of Timely treatment.
+
+# Next Steps
+
+Conduct multivariable Cox and FGR models to adjust for key confounders (e.g., patient age, tumor grade).
+
+- Perform sensitivity analysis using different delay cutoffs (e.g., 60 days) to validate the $\mathbf{42}$-day threshold.
+
+- Visually explore the probability of each event over time using the Cumulative Incidence Function (CIF) curves.
+
+# Conclusion
+
+The hypothesis is strongly supported. Timely treatment initiation ($\le 42$ days) is associated with a highly significant reduction in the hazard of death from both cancer-specific and other causes. The survival benefit persists well beyond the initial treatment period.
+
+
+
+# References
+National Cancer Institute. Surveillance, Epidemiology, and End Results (SEER) Program SEER 18 registry data (1975–2020), Released April 2023. Available at: [Insert Specific SEER URL/Access Point Here]
+
+
+```{r, include=FALSE}
+knitr::write_bib(c('knitr','rmarkdown','posterdown','pagedown'), 'packages.bib')
+```   

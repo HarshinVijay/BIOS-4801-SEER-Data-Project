@@ -19,7 +19,7 @@ Google fonts api stuff
 
 
 
-<title>The Effect of Treatment Delays in Salivary Gland Tumors</title>
+<title>Quantifying the Impact of Treatment Delay on Mortality in Salivary Gland Tumors</title>
 
 
 
@@ -304,7 +304,7 @@ font-size: 20pt;
 </div>
 <!-- Poster Title -->
 <div class= "poster_title">
-<h1 id="title">The Effect of Treatment Delays in Salivary Gland Tumors</h1>
+<h1 id="title">Quantifying the Impact of Treatment Delay on Mortality in Salivary Gland Tumors</h1>
 <h3 id="author">Harshin Vijay<sup>1</sup></h3>
 <h5 id="affiliation"><sup>1</sup> School of Biological Sciences, Georgia Institute of Technology</h5>
 </div>
@@ -317,7 +317,11 @@ font-size: 20pt;
 <div class='poster_body'>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>Salivary gland cancers (SGCs) are rare head and neck malignancies where timely intervention is critical for prognosis. Clinical guidelines suggest that treatment initiation beyond 42 days post-diagnosis is associated with worse overall survival (OS). This study uses population-based data to rigorously quantify the hazard associated with this treatment delay threshold.</p>
+<ul>
+<li><p>Salivary gland cancers (SGCs) are rare head and neck malignancies where timely intervention is critical for prognosis.</p></li>
+<li><p>Clinical guidelines suggest that treatment initiation beyond 42 days post-diagnosis is associated with worse overall survival (OS).</p></li>
+<li><p>This study uses population-based data to rigorously quantify the hazard associated with this treatment delay threshold.</p></li>
+</ul>
 </div>
 <div id="objectives" class="section level1">
 <h1>Objectives</h1>
@@ -336,6 +340,12 @@ font-size: 20pt;
 <li><p>Sustained Benefit: Landmark Analysis (LMA) (<span class="math inline">\(\text{T}_{\text{L}}=42\)</span> days) assessed the OS benefit only among patients surviving past the initial 42-day period.</p></li>
 <li><p>Competing Risks Analysis (CSS): The Fine-Gray Regression (FGR) model was used to model the instantaneous risk (subdistribution hazard) of Cancer Death (Cause 1) while treating Other Death (Cause 2) as a competing event.</p></li>
 </ul>
+<div style="text-align: center;">
+<div class="float">
+<img src="methods_flowchart.png" alt="Flowchart detailing the data collection, categorization, and analytical models used in the study." />
+<div class="figcaption">Flowchart detailing the data collection, categorization, and analytical models used in the study.</div>
+</div>
+</div>
 </div>
 <div id="figure-1" class="section level1">
 <h1>Figure 1</h1>
@@ -364,22 +374,77 @@ Figure 2: Landmark Analysis (LMA) Hazard Ratio for Overall Survival. Among patie
 </div>
 <div id="table-1" class="section level1">
 <h1>Table 1</h1>
-<p>The Fine-Gray model reveals that the benefit holds true for the primary outcome.</p>
-<ul>
-<li><p>Cancer Death (Cause 1): The instantaneous risk of Cancer Death is <span class="math inline">\(\mathbf{30.7\%}\)</span> lower for the Timely group (<span class="math inline">\(\text{SHR} = 0.693; \text{p} &lt; 2.2\text{e}^{-16}\)</span>).</p></li>
-<li><p>Other Death (Cause 2): The risk of Other Death is also significantly lower (<span class="math inline">\(\text{SHR} = 0.756; \text{p} &lt; 2\text{e}^{-12}\)</span>), suggesting the Timely group is healthier overall.</p></li>
-</ul>
+<table class="table table-striped table-hover table-condensed" style="font-size: 35px; color: black; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<span id="tab:final-publication-table">Table 1: </span>Subdistribution Hazard Ratios for Treatment Delay Status
+Estimates the effect of Timely Treatment (vs. Delayed, the reference) on the instantaneous risk of the two competing outcomes: Cancer Death (Cause 1) and Other Death (Cause 2).
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Effect of Timely Treatment vs. Delayed Treatment (Reference)
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+Outcome
+</th>
+<th style="text-align:center;">
+SHR
+</th>
+<th style="text-align:center;">
+95% CI
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Cause 1 (Cancer Death)
+</td>
+<td style="text-align:center;">
+0.693
+</td>
+<td style="text-align:center;">
+[0.636, 0.756]
+</td>
+<td style="text-align:center;">
+&lt; 0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cause 2 (Other Death)
+</td>
+<td style="text-align:center;">
+0.756
+</td>
+<td style="text-align:center;">
+[0.700, 0.818]
+</td>
+<td style="text-align:center;">
+&lt; 0.001
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="discussion" class="section level1">
 <h1>Discussion</h1>
 <p>To summarize this analysis, our hypothesis that Delayed treatment leads to worse survival outcomes is supported across all models. The timely group shows a significantly lower hazard ratio for all outcomes. The Cox PH model provides the instantaneous rate of death from any cause of patients that are alive and at risk during the analysis. The FGR models shows the subdistribution hazard ratio which relates the covariates to the Cumulative Incidence Function (CIF) which is the probability of an event occuring over time. Our analysis shows that timely treatment (treatment &lt; 42 days) reduces the hazard of cancer death by 30.7% (SHR = 0.693) To gain better insights into the difference between timely and delay groups a landmark analysis(LMA) was performed. The LMA shows that among patients who survived past the 42 day period, the timely group still had a 34.1% lower mortality risk as the study continued.</p>
-<p>Based on our Survival models the Kaplan-Meier (KM) curve estimates the survival probability over time for the two groups. There is a difference in delayed vs timely groups and are separated throughout the follow up period. The Log rank test of p&lt; 0.0001 shows the separation is statistically significant. The timely group has a higher probability of survival than the delayed group at every time point.</p>
-<p>The Forest plot shows the Hazard Ratio form the Landmark Cox Model after the 42 day period. The HR of 0.66 indicates that the timely group has a 34% lower instantaneous risk of death than the delayed group going forward. This test removes patients who were censored before 42 days to confirm that there is an advantage of Timely treatment.</p>
+<p>Based on our Survival models the Kaplan-Meier (KM) curve estimates the survival probability over time for the two groups. There is a difference in delayed vs timely groups and are separated throughout the follow up period. The Log rank test of p&lt; 0.0001 shows the separation is statistically significant. The timely group has a higher probability of survival than the delayed group at every time point.The Forest plot shows the Hazard Ratio form the Landmark Cox Model after the 42 day period. The HR of 0.66 indicates that the timely group has a 34% lower instantaneous risk of death than the delayed group going forward. This test removes patients who were censored before 42 days to confirm that there is an advantage of Timely treatment.</p>
 </div>
 <div id="next-steps" class="section level1">
 <h1>Next Steps</h1>
-<p>Conduct multivariable Cox and FGR models to adjust for key confounders (e.g., patient age, tumor grade).</p>
 <ul>
+<li><p>Conduct multivariable Cox and FGR models to adjust for key confounders (e.g., patient age, tumor grade).</p></li>
 <li><p>Perform sensitivity analysis using different delay cutoffs (e.g., 60 days) to validate the <span class="math inline">\(\mathbf{42}\)</span>-day threshold.</p></li>
 <li><p>Visually explore the probability of each event over time using the Cumulative Incidence Function (CIF) curves.</p></li>
 </ul>
@@ -390,7 +455,7 @@ Figure 2: Landmark Analysis (LMA) Hazard Ratio for Overall Survival. Among patie
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
-<p>National Cancer Institute. Surveillance, Epidemiology, and End Results (SEER) Program SEER 18 registry data (1975–2020), Released April 2023. Available at: [Insert Specific SEER URL/Access Point Here]</p>
+<p>National Cancer Institute. Surveillance, Epidemiology, and End Results (SEER) Program SEER 18 registry data (1975–2020), Released April 2023. Available at: <a href="https://seer.cancer.gov/data/" class="uri">https://seer.cancer.gov/data/</a></p>
 </div>
 </div>
 </div>

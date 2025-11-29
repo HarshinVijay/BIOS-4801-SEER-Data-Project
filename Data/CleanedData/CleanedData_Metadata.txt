@@ -17,12 +17,12 @@ Column Definitions (Analysis Variables)
 
 Survival_Months - Numeric - Primary Time Variable. Cleaned, numeric version of the raw survival time.
 
-Time_to_Tx_Days - Numeric - Cleaned, numeric version of the time from diagnosis to treatment (used for $\text{42-day}$ cutoff).
+Time_to_Tx_Days - Numeric - Cleaned, numeric version of the time from diagnosis to treatment (used for 42 days cutoff).
 
 OS_status - Numeric (0/1) - Overall Survival (OS) Event Status. 0 = Censored/Alive. 1 = Died (from any cause). Used for the standard Cox model and KM plots.
 
 Competing_Risk_Status - Numeric (0/1/2) - Cancer-Specific Survival (CSS) Event Status. This multi-state variable is required for the Fine-Gray Competing Risks Model (omitted in final analysis): 0 = Censored; 1 = Died of Cancer; 2 = Died of Other/Unknown Cause.
 
-Delay_Group - Factor - Primary Exposure Variable. Categorized using the clinically determined cutoff: "Timely" ($\le 42 \text{ days}$) vs. "Delayed" ($> 42 \text{ days}$). "Timely" is set as the reference level.
+Delay_Group - Factor - Primary Exposure Variable. Categorized using the clinically determined cutoff: "Timely"  less than 42 days vs. "Delayed" greater than 42 days. "Timely" is set as the reference level.
 
 All other columns - Various - All original columns from the SEER data were retained for potential use as covariates (e.g., Age, Sex, Histology).

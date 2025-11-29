@@ -1,6 +1,6 @@
 **Analysis of Treatment Delay (<42 Days) and Survival Outcomes in Salivary Gland Cancer**
 
-This project explores the impact of delays in cancer therapy ( Treatment start > 42 days post diagnosis) on the survival outcomes compared to patients who receive timely treatment
+This project explores the impact of delays in cancer therapy ( Treatment start > 42 days post diagnosis) on the survival outcomes compared to patients who receive timely treatment.
 
 **Hypothesis:** Patients who receive delayed treatment (Delay > 42 days) will have worse Overall Survival (OS) and Cancer-Specific Survival (CSS) outcomes compared to patients who receive timely treatment.
 

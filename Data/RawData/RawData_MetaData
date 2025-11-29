@@ -1,0 +1,33 @@
+Raw Data Metadata: SEER Research Limited-Field Data
+
+Data Collection
+
+This dataset was obtained from the National Cancer Institute's Surveillance, Epidemiology, and End Results (SEER) program via the SEER*Stat software (Incidence - SEER Research Limited-Field Data, 22 Registries, Nov 2023 Sub).
+
+Collection/Filtering Process (in SEER Stat):
+
+Cohort Filtered: Cohort was filtered based on patients diagnosed from 2000-2021.
+
+Site Inclusion: Filtered for all major Salivary Gland Cancers (ICD-O-3 codes C07.9 - C08.9).
+
+Malignancy: Filtered for Malignant Behavior Code
+
+Stage: Filtered for Localized (Code 1) and Regional (Codes 2-5) stages only (M0 status), excluding Distant (M1) disease.
+
+Note: No further R cleaning has been performed on this data set and it has only had columns added. 
+
+Column Definitions (Raw SEER Variables)
+
+Survival months - Patient survival time from the Date of Diagnosis until death or last follow-up (in months).
+
+Time from diagnosis to treatment in days recode - Time interval from diagnosis date to the first cancer-directed treatment (in days). Used as the primary delay exposure proxy.
+
+Vital status recode (study cutoff used) - The patient's status at the end of the study (either "Alive" or "Dead").
+
+SEER cause-specific death classification - Detailed cause of death status. Used to define cancer death vs. other cause death.
+
+Histologic Type ICD-O-3 - The microscopic classification of the tumor.
+
+SEER Combined Summary Stage 2000 (2004-2017) - Summarized stage (Localized/Regional) used for filtering the M0 cohort.
+
+All other columns - Standard demographic variables (Sex, Year of diagnosis, Race recode, etc.) retrieved from the SEER database.
